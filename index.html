@@ -1,1 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T6 Graphic</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: #07010d;
+      --bg-soft: rgba(18, 7, 30, 0.82);
+      --panel: rgba(29, 13, 47, 0.84);
+      --panel-2: rgba(49, 20, 80, 0.9);
+      --text: #f8eeff;
+      --muted: #ccb7ea;
+      --line: rgba(216, 164, 255, 0.16);
+      --violet: #b140ff;
+      --pink: #ff59d6;
+      --blue: #6c5cff;
+      --glow: rgba(177, 64, 255, 0.45);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 89, 214, 0.16), transparent 18%),
+        radial-gradient(circle at top right, rgba(108, 92, 255, 0.16), transparent 20%),
+        radial-gradient(circle at bottom center, rgba(177, 64, 255, 0.14), transparent 25%),
+        linear-gradient(160deg, #050109 0%, #10041a 35%, #1a0730 65%, #08010f 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black 35%, transparent 95%);
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      background: conic-gradient(from 90deg, rgba(177,64,255,0.08), rgba(255,89,214,0.08), rgba(108,92,255,0.08), rgba(177,64,255,0.08));
+      filter: blur(80px);
+      animation: rotateGlow 18s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg) scale(1); }
+      to { transform: rotate(360deg) scale(1.08); }
+    }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 28px rgba(177,64,255,0.26); }
+      50% { box-shadow: 0 0 46px rgba(255,89,214,0.4); }
+    }
+
+    @keyframes floatOrb {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-18px); }
+    }
+
+    .site-wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: 0.48;
+      animation: floatOrb 8s ease-in-out infinite;
+    }
+
+    .o1 { width: 120px; height: 120px; left: 6%; top: 14%; background: rgba(177,64,255,0.18); }
+    .o2 { width: 90px; height: 90px; right: 8%; top: 22%; background: rgba(255,89,214,0.18); animation-delay: 1s; }
+    .o3 { width: 140px; height: 140px; left: 14%; bottom: 10%; background: rgba(108,92,255,0.16); animation-delay: 2s; }
+    .o4 { width: 100px; height: 100px; right: 18%; bottom: 16%; background: rgba(177,64,255,0.15); animation-delay: 1.6s; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(8, 2, 14, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 0 18px rgba(177,64,255,0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 58px 18px 26px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hero-left {
+      text-align: left;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      color: var(--accent, #f0d5ff);
+      margin-bottom: 18px;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      line-height: 0.95;
+      letter-spacing: -1.5px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff, #ffb7ef, #b99cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 640px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: 0.2s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--violet), var(--pink));
+      box-shadow: 0 0 26px rgba(177,64,255,0.28);
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .hero-right {
+      position: relative;
+      min-height: 460px;
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-card {
+      width: min(100%, 470px);
+      padding: 26px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(47, 16, 79, 0.95), rgba(18, 7, 30, 0.92));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+      animation: pulse 4s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 35%, transparent 65%, rgba(255,255,255,0.03));
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 24px;
+      display: block;
+      margin: 0 auto 18px;
+      box-shadow: 0 0 30px rgba(177,64,255,0.32);
+    }
+
+    .hero-card-title {
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .hero-card-text {
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mini-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .section {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 18px;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin: 0 auto 26px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin: 0 0 10px;
+    }
+
+    .section-text {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .bento {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel,
+    .service,
+    .join-box,
+    .discord-box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+      backdrop-filter: blur(12px);
+    }
+
+    .showcase {
+      min-height: 320px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at center, rgba(255,89,214,0.13), transparent 30%),
+        linear-gradient(135deg, rgba(177,64,255,0.12), rgba(108,92,255,0.08));
+    }
+
+    .showcase h3,
+    .service h3,
+    .join-box h3,
+    .discord-box h3 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .showcase p,
+    .service p,
+    .join-box p,
+    .discord-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.09), rgba(177,64,255,0.28));
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 1.35rem;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .discord-preview {
+      min-height: 280px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+
+    footer {
+      padding: 38px 18px 46px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .bento,
+      .service-grid,
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-left {
+        text-align: center;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2.7rem; }
+      .hero { padding-top: 42px; }
+      .hero-right { min-height: auto; }
+      .nav-inner { justify-content: center; }
+      .brand { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orbs">
+    <span class="orb o1"></span>
+    <span class="orb o2"></span>
+    <span class="orb o3"></span>
+    <span class="orb o4"></span>
+  </div>
+
+  <div class="site-wrap">
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <img src="logo.png" alt="Logo T6 Graphic">
+          <span>T6 Graphic</span>
+        </div>
+        <div class="nav-links">
+          <a href="#accueil">Accueil</a>
+          <a href="#showcase">Showcase</a>
+          <a href="#services">Services</a>
+          <a href="#discord">Discord</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero" id="accueil">
+      <div class="hero-left">
+        <div class="eyebrow">⚡ Univers violet sombre</div>
+        <h1><span class="gradient-text">T6</span><br>GRAPHIC</h1>
+        <p class="subtitle">
+          Un site plus nerveux, plus cyber et plus visuel que l’autre. Parfait pour présenter ton Discord, tes créations graphiques, tes previews et ton identité T6 dans une ambiance néon violette.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="https://discord.gg/TON-LIEN" target="_blank">💬 Rejoindre le Discord</a>
+          <a class="btn secondary" href="#showcase">🖼️ Voir le showcase</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-card">
+          <img src="logo.png" alt="Logo T6 Graphic" class="hero-logo">
+          <div class="hero-card-title">Identité T6</div>
+          <div class="hero-card-text">Bloc central stylé façon carte premium, différent du premier site, avec un rendu plus compact et plus cyber.</div>
+          <div class="mini-list">
+            <div class="mini-item">🎨 Créations graphiques</div>
+            <div class="mini-item">🌌 Style néon / sombre</div>
+            <div class="mini-item">💬 Communauté Discord</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="showcase">
+      <div class="section-head">
+        <h2 class="section-title">Showcase visuel</h2>
+        <p class="section-text">Ici, le design change complètement du premier site avec une structure bento plus moderne et plus visuelle.</p>
+      </div>
+      <div class="bento">
+        <div class="panel showcase">
+          <div>
+            <h3>Zone image / preview principale</h3>
+            <p>Tu peux remplacer ce bloc par une grosse image, une bannière, un aperçu de tes créations ou une présentation de ton univers T6.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="panel">
+            <h3>Ambiance</h3>
+            <p>Thème violet plus agressif, plus techno, et visuellement très différent du site Valancia.</p>
+          </div>
+          <div class="panel">
+            <h3>Présentation</h3>
+            <p>Ajoute ici une courte description de ton Discord, ce que tu proposes, et pourquoi les gens doivent te rejoindre.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section-head">
+        <h2 class="section-title">Services / Catégories</h2>
+        <p class="section-text">Des cartes plus sobres et plus premium que sur l’autre site.</p>
+      </div>
+      <div class="service-grid">
+        <div class="service">
+          <div class="service-icon">🖌️</div>
+          <h3>Graphisme</h3>
+          <p>Miniatures, bannières, affiches, logos, avatars, identité visuelle et contenu pour Discord ou FiveM.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon">🎮</div>
+          <h3>Univers gaming</h3>
+          <p>Présente ici tes visuels, previews, inspirations gaming et contenus autorisés liés à ton activité.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon">🚀</div>
+          <h3>Nouveautés</h3>
+          <p>Ajoute tes sorties récentes, tes annonces, tes mises à jour ou les nouveautés de ton Discord.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="discord">
+      <div class="section-head">
+        <h2 class="section-title">Rejoindre T6 Graphic</h2>
+        <p class="section-text">Un bloc d’entrée différent du premier site, avec un style plus direct et plus compact.</p>
+      </div>
+      <div class="bottom-grid">
+        <div class="discord-box">
+          <h3>Widget / aperçu</h3>
+          <div class="discord-preview">
+            Mets ici ton widget Discord ou remplace par une image de présentation.<br><br>
+            Exemple :<br>
+            <strong>https://discord.com/widget?id=TON_ID_DISCORD&theme=dark</strong>
+          </div>
+        </div>
+        <div class="join-box">
+          <h3>Entrer dans le serveur</h3>
+          <p style="margin-bottom: 18px;">Rejoins le Discord pour voir les créations, suivre les annonces et rester au courant des nouveautés T6.</p>
+          <a class="btn primary" href="https://discord.gg/TON-LIEN" target="_blank">💬 Rejoindre T6</a>
+          <div style="height: 14px;"></div>
+          <a class="btn secondary" href="#services">✨ Voir les catégories</a>
+          <div style="height: 24px;"></div>
+          <h3>Texte d’accueil</h3>
+          <p>Bienvenue sur T6 Graphic. Remplace ce texte par ta vraie présentation, tes horaires, ton fonctionnement ou les infos importantes du Discord.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 T6 Graphic — Nouveau design
+    </footer>
+  </div>
+</body>
+</html>
 
